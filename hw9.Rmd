@@ -1,0 +1,175 @@
+---
+title: "HW9"
+author: "yixuan"
+date: "4/23/2021"
+output: html_document
+---
+
+Welcome to my hw9 website! 
+The following is the report of my group's work.
+
+### Introduction: 
+Eugen Dimant, a well respected social scientist whose research interest is experimental behavioral economics, with a focus on behavioral ethics, crime, and corruption. Bill Nye, popularly known as Bill Nye the Science Guy, is a mechanical engineer by training and science communicator and television presenter by trade. Our group is curious to know if we can tell them apart by the sentiments expressed in their tweets. Specifically, we predict that Bill Nye is more fun and Eugen Dimant is more serious. 
+
+### Getting the data ready: 
+We found Eugen Dimant and Bill Nye on Twitter. 
+We extracted their most recent 500 tweets. 
+We only selected the time, content, and course of the tweet and got rid of other irrelevant variables. 
+We created a regular expression pattern for Dimant’s tweets and  Nye’s tweets. 
+Out of curiosity, we determined and plotted the most common words used in Dimant and Nye’s tweets. 
+We joined the NRC Sentiment and Emotion Lexicons to Dimant and Nye’s datasets. Then we combined Dimant and Nye’s datasets. 
+
+```{r, include=FALSE}
+# load twitter library - the rtweet library is recommended now over twitteR
+library(rtweet)
+# plotting and pipes - tidyverse!
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+# text mining library
+library(tidytext)
+library(twitteR)
+# Naive Bayes
+library(e1071)
+library(splitTools)
+library(caret)
+```
+
+```{r}
+#get tweets data
+twitter_token <- create_token(
+  app = "516project",
+  consumer_key = "A0aV8HCimjtABAMHLjKdirJAJ",
+  consumer_secret = "RJCEvK2AqSbB5YSIrao2JfDxIqf2pEN2vdJ0V5XuHx551ifMaf",
+  access_token = "373190113-XI056rrTPPToGEjRJ24QszXacgFZBGja11zLVppt",
+  access_secret = "ppBA9oHoaDHMKAPdzWO0jzGeL0BADbfp6rGKb7nodYtYn")
+#Finding username 
+bill = lookup_users("BillNye")
+dimant = lookup_users("eugen_dimant")
+#get_timelines finds all of a username's tweets from most recent ones to the earlier ones
+dimant_tweet = get_timelines(867914691783340032, n = 500)
+bill_tweet = get_timelines(37710752, n = 500)
+#Only selected the time of tweet, content of the tweet and the course of the tweet and got rid of other irrelevant variables
+cleaned_bill <- bill_tweet %>% select(created_at,text,source)
+cleaned_dimant <- dimant_tweet %>% select(created_at,text,source)
+```
+
+```{r}
+# Create a regex pattern
+reg <- "([^A-Za-z\\d#@']|'(?![A-Za-z\\d#@]))"
+#For bill's tweet
+words_bill <- cleaned_bill %>%  
+  filter(!str_detect(text, '^"')) %>%  
+  mutate(text = str_replace_all(text, "https://t.co/[A-Za-z\\d]+|&amp;", "")) %>%
+  unnest_tokens(word, text, token = "regex", pattern = reg) %>%  
+  filter(!word %in% stop_words$word, 
+         str_detect(word, "[a-z]"))
+# For Dimant's tweets
+words_dimant <- cleaned_dimant %>%  
+  filter(!str_detect(text, '^"')) %>%  
+  mutate(text = str_replace_all(text, "https://t.co/[A-Za-z\\d]+|&amp;", "")) %>%
+  unnest_tokens(word, text, token = "regex", pattern = reg) %>%  
+  filter(!word %in% stop_words$word,
+         str_detect(word, "[a-z]"))
+```
+
+```{r}
+#Joining the NRC lexicon to the dataset 
+nrc = read_rds("nrc.rds")
+#For Bill (showing the top 10 words and their sentiment)
+sentiment_bill <- 
+  inner_join(words_bill, nrc, by = "word") %>%
+  group_by(sentiment) %>%
+  mutate(person = "Bill")
+#For Dimant (showing the top 10 words and their sentiment)
+sentiment_dimant <- 
+  inner_join(words_dimant, nrc, by = "word") %>%
+  group_by(sentiment) %>%
+  mutate(person = "Dimant")
+# combining dataset
+combined_tweets <- as.data.frame(rbind(sentiment_bill,sentiment_dimant))
+```
+
+#### Part A：
+For Part A, we first split our data into train and test data. Then, we used the train data to develop a Naive Bayes algorithm.
+
+```{r}
+# split data into train and test
+set.seed(3451)
+data_split <- partition(combined_tweets$person, p = c(train = 0.8, test = 0.2))
+train <- combined_tweets[data_split$train, ]
+test <- combined_tweets[data_split$test, ]
+```
+
+```{r}
+# develop Naive Bayes algorithm
+nb_default <-naiveBayes(as.factor(person)~ sentiment, data = train)
+nb_default
+```
+ 
+#### Part B: 
+For Part B, we applied the algorithm on the test data and created a confusion matrix. 
+
+```{r}
+default_pred <- predict(nb_default, test, type="class")
+confusionMatrix(default_pred, as.factor(test$person))
+```
+
+#### Part C: 
+We repeated what we did up until Part B for Dan Ariely and Colin Camerer.
+
+```{r}
+# Extract tweets from Dan Ariely and Colin Camerer
+dan_tweet = get_timelines("danariely", n = 500)
+colin_tweet = get_timelines("CFCamerer", n = 500)
+# Clean the data
+cleaned_dan <- dan_tweet %>% 
+  select(created_at,text,source) 
+cleaned_colin <- colin_tweet %>% 
+  select(created_at,text,source)
+# Do sentiment analysis
+words_dan <- cleaned_dan %>%  
+  filter(!str_detect(text, '^"')) %>%  
+  mutate(text = str_replace_all(text, "https://t.co/[A-Za-z\\d]+|&amp;", "")) %>%
+  unnest_tokens(word, text, token = "regex", pattern = reg) %>%  
+  filter(!word %in% stop_words$word, 
+         str_detect(word, "[a-z]"))
+words_colin <- cleaned_colin %>%  
+  filter(!str_detect(text, '^"')) %>%  
+  mutate(text = str_replace_all(text, "https://t.co/[A-Za-z\\d]+|&amp;", "")) %>%
+  unnest_tokens(word, text, token = "regex", pattern = reg) %>%  
+  filter(!word %in% stop_words$word,
+         str_detect(word, "[a-z]"))
+sentiment_dan <- 
+  inner_join(words_dan, nrc, by = "word")
+sentiment_colin <- 
+  inner_join(words_colin, nrc, by = "word")
+```
+
+```{r}
+# Try the prediction algorithm
+pred_dan <- predict(nb_default, sentiment_dan, type="class")
+dan_dimant <- pred_dan[]=="Dimant"
+sum(dan_dimant==TRUE)
+sum(dan_dimant==FALSE)
+pred_colin <- predict(nb_default, sentiment_colin, type="class")
+colin_dimant <- pred_colin[]=="Dimant"
+sum(colin_dimant==TRUE)
+sum(colin_dimant==FALSE)
+```
+
+#### Results: 
+The summary output of the Naive Bayes classifier shows that person 0 (Dimant) expressed sentiments more related to anticipation, disgust, fear, and negativity in their tweets, while person 1 (Bill) expressed sentiments more related to anger, joy, positivity, and sadness in their tweets. Both people expressed the same level of surprise and trust in their tweets. 
+
+Feeding the algorithm with tweets from Dan Ariely and Colin Camerer, the algorithm predicts that 1496 words from Dan Ariely's tweets are Dimant's words and 783 words are Bill's words. Also, the algorithm predicts that 2222 words from Colin Camerer are Dimant's words and 993 words from Colin Camerer are Bill's words. In general, according to the algorithm, both Dan Ariely and Colin Camerer are more like Dimant.
+
+
+#### Conclusion:
+
+Is it possible that, as a science communicator and television presenter, Bill Nye needs to show more joy and positivity in his tweets. Considering that Bill Nye’s tweets are meant to target his audience, who are mostly younger people interested in the STEM field, it makes sense that the overall sentiment of his tweets are more lighthearted. In comparison, as an academic, Eugen Dimant's use of language is much more rigorous compared to Bill Nye, and the sentiment reflected by these words may demonstrate a more serious tone. Furthermore, since Eugen Dimant’s field of research is in social psychology, it is inevitable that controversial social and political issues are the topics of his focus. The sensitive nature makes the discussions surrounding these topics more emotionally charged, which can also add to the overall negative sentiment reflected by Eugene Dimant’s tweets. 
+
+However, we must acknowledge that according to the confusion matrix in Part B, the accuracy of the model is not that great. The classifier is only correct half of the time. 
+
+In the end, we would like to also thank our team members for working on this document. 
+
+*Contributors*: Jason Kang, Shishi Li, Yixuan Wang, Bingling Wang, Mason Shihab.
