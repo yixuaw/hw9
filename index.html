@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="yixuan" />
+
+
+<title>HW9</title>
+
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/simplex.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 41px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 46px;
+  margin-top: -46px;
+}
+.section h2 {
+  padding-top: 46px;
+  margin-top: -46px;
+}
+.section h3 {
+  padding-top: 46px;
+  margin-top: -46px;
+}
+.section h4 {
+  padding-top: 46px;
+  margin-top: -46px;
+}
+.section h5 {
+  padding-top: 46px;
+  margin-top: -46px;
+}
+.section h6 {
+  padding-top: 46px;
+  margin-top: -46px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Yixuan Wang</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="hw9.html">Homework9</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">HW9</h1>
+<h4 class="author">yixuan</h4>
+<h4 class="date">4/23/2021</h4>
+
+</div>
+
+
+<p>Welcome to my hw9 website! The following is the report of my group’s work.</p>
+<div id="introduction" class="section level3">
+<h3>Introduction:</h3>
+<p>Eugen Dimant, a well respected social scientist whose research interest is experimental behavioral economics, with a focus on behavioral ethics, crime, and corruption. Bill Nye, popularly known as Bill Nye the Science Guy, is a mechanical engineer by training and science communicator and television presenter by trade. Our group is curious to know if we can tell them apart by the sentiments expressed in their tweets. Specifically, we predict that Bill Nye is more fun and Eugen Dimant is more serious.</p>
+</div>
+<div id="getting-the-data-ready" class="section level3">
+<h3>Getting the data ready:</h3>
+<p>We found Eugen Dimant and Bill Nye on Twitter. We extracted their most recent 500 tweets. We only selected the time, content, and course of the tweet and got rid of other irrelevant variables. We created a regular expression pattern for Dimant’s tweets and Nye’s tweets. Out of curiosity, we determined and plotted the most common words used in Dimant and Nye’s tweets. We joined the NRC Sentiment and Emotion Lexicons to Dimant and Nye’s datasets. Then we combined Dimant and Nye’s datasets.</p>
+<pre class="r"><code>#get tweets data
+twitter_token &lt;- create_token(
+  app = &quot;516project&quot;,
+  consumer_key = &quot;A0aV8HCimjtABAMHLjKdirJAJ&quot;,
+  consumer_secret = &quot;RJCEvK2AqSbB5YSIrao2JfDxIqf2pEN2vdJ0V5XuHx551ifMaf&quot;,
+  access_token = &quot;373190113-XI056rrTPPToGEjRJ24QszXacgFZBGja11zLVppt&quot;,
+  access_secret = &quot;ppBA9oHoaDHMKAPdzWO0jzGeL0BADbfp6rGKb7nodYtYn&quot;)
+#Finding username 
+bill = lookup_users(&quot;BillNye&quot;)
+dimant = lookup_users(&quot;eugen_dimant&quot;)
+#get_timelines finds all of a username&#39;s tweets from most recent ones to the earlier ones
+dimant_tweet = get_timelines(867914691783340032, n = 500)
+bill_tweet = get_timelines(37710752, n = 500)
+#Only selected the time of tweet, content of the tweet and the course of the tweet and got rid of other irrelevant variables
+cleaned_bill &lt;- bill_tweet %&gt;% select(created_at,text,source)
+cleaned_dimant &lt;- dimant_tweet %&gt;% select(created_at,text,source)</code></pre>
+<pre class="r"><code># Create a regex pattern
+reg &lt;- &quot;([^A-Za-z\\d#@&#39;]|&#39;(?![A-Za-z\\d#@]))&quot;
+#For bill&#39;s tweet
+words_bill &lt;- cleaned_bill %&gt;%  
+  filter(!str_detect(text, &#39;^&quot;&#39;)) %&gt;%  
+  mutate(text = str_replace_all(text, &quot;https://t.co/[A-Za-z\\d]+|&amp;amp;&quot;, &quot;&quot;)) %&gt;%
+  unnest_tokens(word, text, token = &quot;regex&quot;, pattern = reg) %&gt;%  
+  filter(!word %in% stop_words$word, 
+         str_detect(word, &quot;[a-z]&quot;))
+# For Dimant&#39;s tweets
+words_dimant &lt;- cleaned_dimant %&gt;%  
+  filter(!str_detect(text, &#39;^&quot;&#39;)) %&gt;%  
+  mutate(text = str_replace_all(text, &quot;https://t.co/[A-Za-z\\d]+|&amp;amp;&quot;, &quot;&quot;)) %&gt;%
+  unnest_tokens(word, text, token = &quot;regex&quot;, pattern = reg) %&gt;%  
+  filter(!word %in% stop_words$word,
+         str_detect(word, &quot;[a-z]&quot;))</code></pre>
+<pre class="r"><code>#Joining the NRC lexicon to the dataset 
+nrc = read_rds(&quot;nrc.rds&quot;)
+#For Bill (showing the top 10 words and their sentiment)
+sentiment_bill &lt;- 
+  inner_join(words_bill, nrc, by = &quot;word&quot;) %&gt;%
+  group_by(sentiment) %&gt;%
+  mutate(person = &quot;Bill&quot;)
+#For Dimant (showing the top 10 words and their sentiment)
+sentiment_dimant &lt;- 
+  inner_join(words_dimant, nrc, by = &quot;word&quot;) %&gt;%
+  group_by(sentiment) %&gt;%
+  mutate(person = &quot;Dimant&quot;)
+# combining dataset
+combined_tweets &lt;- as.data.frame(rbind(sentiment_bill,sentiment_dimant))</code></pre>
+<div id="part-a" class="section level4">
+<h4>Part A：</h4>
+<p>For Part A, we first split our data into train and test data. Then, we used the train data to develop a Naive Bayes algorithm.</p>
+<pre class="r"><code># split data into train and test
+set.seed(3451)
+data_split &lt;- partition(combined_tweets$person, p = c(train = 0.8, test = 0.2))
+train &lt;- combined_tweets[data_split$train, ]
+test &lt;- combined_tweets[data_split$test, ]</code></pre>
+<pre class="r"><code># develop Naive Bayes algorithm
+nb_default &lt;-naiveBayes(as.factor(person)~ sentiment, data = train)
+nb_default</code></pre>
+<pre><code>## 
+## Naive Bayes Classifier for Discrete Predictors
+## 
+## Call:
+## naiveBayes.default(x = X, y = Y, laplace = laplace)
+## 
+## A-priori probabilities:
+## Y
+##      Bill    Dimant 
+## 0.4825017 0.5174983 
+## 
+## Conditional probabilities:
+##         sentiment
+## Y             anger anticipation    disgust       fear        joy   negative
+##   Bill   0.04398690   0.15301825 0.02058961 0.07440337 0.11277492 0.08235845
+##   Dimant 0.05890052   0.11561955 0.03315881 0.07286213 0.07329843 0.12041885
+##         sentiment
+## Y          positive    sadness   surprise      trust
+##   Bill   0.26813290 0.04445484 0.05381376 0.14646701
+##   Dimant 0.27748691 0.04886562 0.04406632 0.15532286</code></pre>
+</div>
+<div id="part-b" class="section level4">
+<h4>Part B:</h4>
+<p>For Part B, we applied the algorithm on the test data and created a confusion matrix.</p>
+<pre class="r"><code>default_pred &lt;- predict(nb_default, test, type=&quot;class&quot;)
+confusionMatrix(default_pred, as.factor(test$person))</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction Bill Dimant
+##     Bill    166    126
+##     Dimant  369    447
+##                                           
+##                Accuracy : 0.5532          
+##                  95% CI : (0.5234, 0.5828)
+##     No Information Rate : 0.5171          
+##     P-Value [Acc &gt; NIR] : 0.008723        
+##                                           
+##                   Kappa : 0.0918          
+##                                           
+##  Mcnemar&#39;s Test P-Value : &lt; 2.2e-16       
+##                                           
+##             Sensitivity : 0.3103          
+##             Specificity : 0.7801          
+##          Pos Pred Value : 0.5685          
+##          Neg Pred Value : 0.5478          
+##              Prevalence : 0.4829          
+##          Detection Rate : 0.1498          
+##    Detection Prevalence : 0.2635          
+##       Balanced Accuracy : 0.5452          
+##                                           
+##        &#39;Positive&#39; Class : Bill            
+## </code></pre>
+</div>
+<div id="part-c" class="section level4">
+<h4>Part C:</h4>
+<p>We repeated what we did up until Part B for Dan Ariely and Colin Camerer.</p>
+<pre class="r"><code># Extract tweets from Dan Ariely and Colin Camerer
+dan_tweet = get_timelines(&quot;danariely&quot;, n = 500)
+colin_tweet = get_timelines(&quot;CFCamerer&quot;, n = 500)
+# Clean the data
+cleaned_dan &lt;- dan_tweet %&gt;% 
+  select(created_at,text,source) 
+cleaned_colin &lt;- colin_tweet %&gt;% 
+  select(created_at,text,source)
+# Do sentiment analysis
+words_dan &lt;- cleaned_dan %&gt;%  
+  filter(!str_detect(text, &#39;^&quot;&#39;)) %&gt;%  
+  mutate(text = str_replace_all(text, &quot;https://t.co/[A-Za-z\\d]+|&amp;amp;&quot;, &quot;&quot;)) %&gt;%
+  unnest_tokens(word, text, token = &quot;regex&quot;, pattern = reg) %&gt;%  
+  filter(!word %in% stop_words$word, 
+         str_detect(word, &quot;[a-z]&quot;))
+words_colin &lt;- cleaned_colin %&gt;%  
+  filter(!str_detect(text, &#39;^&quot;&#39;)) %&gt;%  
+  mutate(text = str_replace_all(text, &quot;https://t.co/[A-Za-z\\d]+|&amp;amp;&quot;, &quot;&quot;)) %&gt;%
+  unnest_tokens(word, text, token = &quot;regex&quot;, pattern = reg) %&gt;%  
+  filter(!word %in% stop_words$word,
+         str_detect(word, &quot;[a-z]&quot;))
+sentiment_dan &lt;- 
+  inner_join(words_dan, nrc, by = &quot;word&quot;)
+sentiment_colin &lt;- 
+  inner_join(words_colin, nrc, by = &quot;word&quot;)</code></pre>
+<pre class="r"><code># Try the prediction algorithm
+pred_dan &lt;- predict(nb_default, sentiment_dan, type=&quot;class&quot;)
+dan_dimant &lt;- pred_dan[]==&quot;Dimant&quot;
+sum(dan_dimant==TRUE)</code></pre>
+<pre><code>## [1] 1666</code></pre>
+<pre class="r"><code>sum(dan_dimant==FALSE)</code></pre>
+<pre><code>## [1] 613</code></pre>
+<pre class="r"><code>pred_colin &lt;- predict(nb_default, sentiment_colin, type=&quot;class&quot;)
+colin_dimant &lt;- pred_colin[]==&quot;Dimant&quot;
+sum(colin_dimant==TRUE)</code></pre>
+<pre><code>## [1] 2474</code></pre>
+<pre class="r"><code>sum(colin_dimant==FALSE)</code></pre>
+<pre><code>## [1] 732</code></pre>
+</div>
+<div id="results" class="section level4">
+<h4>Results:</h4>
+<p>The summary output of the Naive Bayes classifier shows that person 0 (Dimant) expressed sentiments more related to anticipation, disgust, fear, and negativity in their tweets, while person 1 (Bill) expressed sentiments more related to anger, joy, positivity, and sadness in their tweets. Both people expressed the same level of surprise and trust in their tweets.</p>
+<p>Feeding the algorithm with tweets from Dan Ariely and Colin Camerer, the algorithm predicts that 1496 words from Dan Ariely’s tweets are Dimant’s words and 783 words are Bill’s words. Also, the algorithm predicts that 2222 words from Colin Camerer are Dimant’s words and 993 words from Colin Camerer are Bill’s words. In general, according to the algorithm, both Dan Ariely and Colin Camerer are more like Dimant.</p>
+</div>
+<div id="conclusion" class="section level4">
+<h4>Conclusion:</h4>
+<p>Is it possible that, as a science communicator and television presenter, Bill Nye needs to show more joy and positivity in his tweets. Considering that Bill Nye’s tweets are meant to target his audience, who are mostly younger people interested in the STEM field, it makes sense that the overall sentiment of his tweets are more lighthearted. In comparison, as an academic, Eugen Dimant’s use of language is much more rigorous compared to Bill Nye, and the sentiment reflected by these words may demonstrate a more serious tone. Furthermore, since Eugen Dimant’s field of research is in social psychology, it is inevitable that controversial social and political issues are the topics of his focus. The sensitive nature makes the discussions surrounding these topics more emotionally charged, which can also add to the overall negative sentiment reflected by Eugene Dimant’s tweets.</p>
+<p>However, we must acknowledge that according to the confusion matrix in Part B, the accuracy of the model is not that great. The classifier is only correct half of the time.</p>
+<p>In the end, we would like to also thank our team members for working on this document.</p>
+<p><em>Contributors</em>: Jason Kang, Shishi Li, Yixuan Wang, Bingling Wang, Mason Shihab.</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
